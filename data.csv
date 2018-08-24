@@ -1,0 +1,28 @@
+main,child,percent
+pizza bulk,dough,0.25
+,pepperoni,0.25
+,cheese,0.25
+,sauce,0.25
+,results,1
+dough,flour,0.5
+,water,0.25
+,sugar,0.25
+,results,1
+sugar,carbon,0.33
+,hydrogen,0.33
+,oxygen,0.34
+,results,1
+pepperoni,meat,0.4
+,tasty meat,0.3
+,water,0.3
+,results,1
+cheese,milk,1
+,results,1
+sauce,water,0.25
+,tomatoes,0.25
+,sugar,0.25
+,salt,0.25
+,results,1
+meat,mystery meat A,0.5
+,mystery meat B,0.5
+,results,1
