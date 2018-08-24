@@ -13,7 +13,10 @@ const readDataAndCalculate = file => {
       bulkDataStruct.parseFileToBranchStructure(row);
     })
     .on("end", function() {
+      console.log(bulkDataStruct.nodeChildPercentRelationship);
       bulkDataStruct.combineBranchesToFormTreeStructure();
+      // console.log(bulkDataStruct.bulkDataMap);
+      console.log(bulkDataStruct.nodeChildPercentRelationship);
     });
 };
 

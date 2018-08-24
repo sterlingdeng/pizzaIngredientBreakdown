@@ -29,16 +29,18 @@ class bulkDataStructure {
 
     const child = data.child;
     const percent = data.percent;
-    let nodeObject = this.nodeChildPercentRelationship.get(this.currentNode);
+    let currentNode = this.nodeChildPercentRelationship.get(this.currentNode);
 
     // data.main.length > 0 case is when first encountering the node
     if (data.main.length > 0) {
       this.currentNode = node;
-      nodeObject = { node: data.main, traversed: false, children: new Map() };
+      // nodeObject = { node: data.main, traversed: false, children: new Map() };
+      currentNode = new Node(node);
     }
+    const childNode = new Node(child, currentNode, percent);
 
-    nodeObject.children.set(child, percent);
-    this.nodeChildPercentRelationship.set(this.currentNode, nodeObject);
+    currentNode.children.set(child, childNode);
+    this.nodeChildPercentRelationship.set(this.currentNode, currentNode);
   }
 
   /**
@@ -48,24 +50,26 @@ class bulkDataStructure {
    *
    */
 
-  doBFS(node, object) {
-    if (object.traversed) {
+  doBFS(node, nodeClass, parent) {
+    if (nodeClass.traversed) {
       return null;
     }
 
-    object.children.forEach((percentage, child) => {
+    nodeClass.children.forEach((childNode, child) => {
       if (this.nodeChildPercentRelationship.has(child)) {
-        const recurseChildObject = this.nodeChildPercentRelationship.get(child);
-        const recursedChild = this.doBFS(child, recurseChildObject);
-        let returnedChildObject = object.children.set(
-          recursedChild,
-          recurseChildObject
-        );
-        this.nodeChildPercentRelationship.set(node, returnedChildObject);
+        // checks the top level to determine if the child is has children
+        const childNodeClass = this.nodeChildPercentRelationship.get(child); // gets the class of the child to recurse into
+        const recursedNodeClass = this.doBFS(child, childNodeClass, node);
+        nodeClass.children.set(child, recursedNodeClass);
+        nodeClass.predecessor = parent;
+        nodeClass.percentToParent = childNode.percentToParent;
+        this.nodeChildPercentRelationship.set(node, nodeClass);
       } else {
-        return node;
+        return null;
       }
     });
+    nodeClass.predecessor = parent;
+    return nodeClass;
   }
 
   combineBranchesToFormTreeStructure() {
@@ -75,8 +79,8 @@ class bulkDataStructure {
 
     // check if the node has been traversed
 
-    this.nodeChildPercentRelationship.forEach((object, node) => {
-      this.doBFS(node, object);
+    this.nodeChildPercentRelationship.forEach((nodeClass, node) => {
+      this.doBFS(node, nodeClass);
     });
   }
 
@@ -91,6 +95,16 @@ class bulkDataStructure {
     if (!bulkDataMap.has(array[0])) {
       bulkDataMap.set();
     }
+  }
+}
+
+class Node {
+  constructor(node, predecessor = null, percent = null) {
+    this.node = node;
+    this.traversed = false;
+    this.predecessor = predecessor;
+    this.children = new Map();
+    this.percentToParent = percent;
   }
 }
 
