@@ -1,22 +1,20 @@
 const fs = require("fs");
 const csv = require("csv-parser");
-const bulkDataStructure = require("./treeRelationAlgo");
+const PizzaDataStructure = require("./pizzaBulk");
 
 const csvData = "./data.csv";
-const bulkDataStruct = new bulkDataStructure();
+const bulkDataStruct = new PizzaDataStructure();
 
 // utility function to process the csv file and read in data row by row, uses csv-parser node package.
 const readDataAndCalculate = file => {
   fs.createReadStream(file)
     .pipe(csv())
     .on("data", row => {
-      bulkDataStruct.parseFileToBranchStructure(row);
+      bulkDataStruct.parseFileToAdjList(row);
     })
     .on("end", function() {
-      console.log(bulkDataStruct.nodeChildPercentRelationship);
-      bulkDataStruct.combineBranchesToFormTreeStructure();
-      // console.log(bulkDataStruct.bulkDataMap);
-      console.log(bulkDataStruct.nodeChildPercentRelationship);
+      bulkDataStruct.calculatePercentages("pizza bulk");
+      bulkDataStruct.listRawMaterials();
     });
 };
 
