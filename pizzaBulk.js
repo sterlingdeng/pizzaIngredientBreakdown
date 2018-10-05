@@ -33,10 +33,9 @@ class PizzaDataStructure {
 
     if (parent.length > 0) {
       this.currentNode = parent;
-      this.addRelation(this.currentNode, child, percent);
-    } else {
-      this.addRelation(this.currentNode, child, percent);
     }
+    
+    this.addRelation(this.currentNode, child, percent);
   }
 
   calculatePercentages(search) {
